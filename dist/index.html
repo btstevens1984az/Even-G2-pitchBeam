@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"
+    />
+    <title>PitchBeam</title>
+    <style>
+      :root {
+        --pb-bg: #0a0f0c;
+        --pb-surface: #111a14;
+        --pb-surface-2: #17241c;
+        --pb-border: #2a4034;
+        --pb-green: #4ade80;
+        --pb-green-dim: #22c55e;
+        --pb-green-glow: rgba(74, 222, 128, 0.15);
+        --pb-text: #e8f5ec;
+        --pb-muted: #8aa894;
+        --pb-danger: #f87171;
+        --pb-radius: 16px;
+        --pb-font: "SF Pro Display", "Segoe UI", system-ui, sans-serif;
+      }
+
+      * { box-sizing: border-box; }
+
+      html, body {
+        margin: 0;
+        min-height: 100%;
+        background: var(--pb-bg);
+        color: var(--pb-text);
+        font-family: var(--pb-font);
+      }
+
+      #phone-app {
+        min-height: 100vh;
+        background:
+          radial-gradient(ellipse 80% 50% at 50% -10%, var(--pb-green-glow), transparent),
+          var(--pb-bg);
+      }
+
+      .pb-shell {
+        max-width: 520px;
+        margin: 0 auto;
+        padding: 20px 18px 40px;
+      }
+
+      .pb-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 24px;
+      }
+
+      .pb-brand {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+
+      .pb-logo {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, var(--pb-green), #166534);
+        display: grid;
+        place-items: center;
+        font-size: 20px;
+        color: #052e16;
+        box-shadow: 0 0 24px var(--pb-green-glow);
+      }
+
+      .pb-brand h1 {
+        margin: 0;
+        font-size: 1.35rem;
+        letter-spacing: -0.02em;
+      }
+
+      .pb-brand p {
+        margin: 2px 0 0;
+        font-size: 0.78rem;
+        color: var(--pb-muted);
+      }
+
+      .pb-badge {
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        padding: 6px 10px;
+        border-radius: 999px;
+        border: 1px solid var(--pb-border);
+        color: var(--pb-green);
+        background: var(--pb-surface);
+      }
+
+      .pb-hero {
+        display: grid;
+        gap: 18px;
+        margin-bottom: 22px;
+      }
+
+      .pb-hero-copy h2 {
+        margin: 0 0 10px;
+        font-size: 1.55rem;
+        line-height: 1.2;
+        letter-spacing: -0.03em;
+      }
+
+      .pb-hero-copy p {
+        margin: 0;
+        color: var(--pb-muted);
+        line-height: 1.55;
+        font-size: 0.95rem;
+      }
+
+      .pb-live-card {
+        background: var(--pb-surface);
+        border: 1px solid var(--pb-border);
+        border-radius: var(--pb-radius);
+        padding: 16px;
+        transition: border-color 0.3s, box-shadow 0.3s;
+      }
+
+      .pb-live-card.live {
+        border-color: var(--pb-green-dim);
+        box-shadow: 0 0 0 1px var(--pb-green-glow), 0 12px 40px rgba(0,0,0,0.35);
+      }
+
+      .pb-live-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+      }
+
+      #pb-pace-label[data-status="perfect"] { color: var(--pb-green); }
+      #pb-pace-label[data-status="fast"] { color: #fbbf24; }
+      #pb-pace-label[data-status="slow"] { color: #60a5fa; }
+      #pb-pace-label[data-status="silent"] { color: var(--pb-muted); }
+
+      .pb-vu-track {
+        height: 6px;
+        background: var(--pb-surface-2);
+        border-radius: 999px;
+        overflow: hidden;
+        margin-bottom: 14px;
+      }
+
+      .pb-vu-fill {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, var(--pb-green-dim), var(--pb-green));
+        border-radius: 999px;
+        transition: width 0.12s linear;
+      }
+
+      .pb-line-preview {
+        margin: 0 0 12px;
+        font-size: 1.05rem;
+        line-height: 1.45;
+        min-height: 3.2em;
+      }
+
+      .pb-live-meta {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.78rem;
+        color: var(--pb-muted);
+      }
+
+      .pb-controls, .pb-scripts, .pb-editor {
+        background: var(--pb-surface);
+        border: 1px solid var(--pb-border);
+        border-radius: var(--pb-radius);
+        padding: 16px;
+        margin-bottom: 16px;
+      }
+
+      .pb-control-row {
+        margin-bottom: 14px;
+      }
+
+      .pb-control-row:last-child { margin-bottom: 0; }
+
+      .pb-control-row label {
+        display: block;
+        font-size: 0.82rem;
+        color: var(--pb-muted);
+        margin-bottom: 8px;
+      }
+
+      .pb-control-row select,
+      .pb-control-row input[type="range"] {
+        width: 100%;
+      }
+
+      .pb-control-row select {
+        background: var(--pb-surface-2);
+        color: var(--pb-text);
+        border: 1px solid var(--pb-border);
+        border-radius: 10px;
+        padding: 10px 12px;
+        font-size: 0.9rem;
+      }
+
+      .pb-toggle-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .pb-toggle-row label { margin: 0; }
+
+      .pb-section-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 12px;
+      }
+
+      .pb-section-head h3 {
+        margin: 0;
+        font-size: 0.95rem;
+      }
+
+      .pb-script-list {
+        display: grid;
+        gap: 8px;
+      }
+
+      .pb-script-item {
+        text-align: left;
+        background: var(--pb-surface-2);
+        border: 1px solid var(--pb-border);
+        border-radius: 12px;
+        padding: 12px 14px;
+        color: var(--pb-text);
+        cursor: pointer;
+      }
+
+      .pb-script-item.active {
+        border-color: var(--pb-green-dim);
+        background: rgba(34, 197, 94, 0.08);
+      }
+
+      .pb-script-item strong {
+        display: block;
+        margin-bottom: 4px;
+        font-size: 0.92rem;
+      }
+
+      .pb-script-item span {
+        font-size: 0.75rem;
+        color: var(--pb-muted);
+      }
+
+      #pb-script-body {
+        width: 100%;
+        background: var(--pb-surface-2);
+        color: var(--pb-text);
+        border: 1px solid var(--pb-border);
+        border-radius: 12px;
+        padding: 12px;
+        font-size: 0.92rem;
+        line-height: 1.5;
+        resize: vertical;
+        min-height: 180px;
+      }
+
+      .pb-btn {
+        border: none;
+        border-radius: 10px;
+        padding: 10px 14px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        cursor: pointer;
+        background: var(--pb-green);
+        color: #052e16;
+      }
+
+      .pb-btn.ghost {
+        background: transparent;
+        border: 1px solid var(--pb-border);
+        color: var(--pb-text);
+      }
+
+      .pb-btn.primary {
+        width: 100%;
+        padding: 14px;
+        font-size: 1rem;
+        border-radius: 12px;
+      }
+
+      .pb-btn.danger {
+        background: var(--pb-danger);
+        color: #fff;
+      }
+
+      .pb-session-bar {
+        margin-top: 8px;
+      }
+
+      .pb-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-top: 14px;
+      }
+
+      .pb-stats div {
+        background: var(--pb-surface);
+        border: 1px solid var(--pb-border);
+        border-radius: 12px;
+        padding: 12px 8px;
+        text-align: center;
+      }
+
+      .pb-stats strong {
+        display: block;
+        font-size: 1.2rem;
+        margin-bottom: 4px;
+      }
+
+      .pb-stats span {
+        font-size: 0.68rem;
+        color: var(--pb-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .pb-footer {
+        margin-top: 20px;
+        text-align: center;
+      }
+
+      .pb-footer p {
+        margin: 0;
+        font-size: 0.75rem;
+        color: var(--pb-muted);
+        line-height: 1.5;
+      }
+    </style>
+    <script type="module" crossorigin src="/assets/index-CzLCHPpL.js"></script>
+  </head>
+  <body>
+    <div id="phone-app"></div>
+  </body>
+</html>

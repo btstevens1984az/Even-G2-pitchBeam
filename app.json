@@ -1,0 +1,17 @@
+{
+  "package_id": "dev.pitchbeam.g2",
+  "edition": "202601",
+  "name": "PitchBeam",
+  "version": "1.0.0",
+  "min_app_version": "2.0.0",
+  "min_sdk_version": "0.0.10",
+  "entrypoint": "index.html",
+  "permissions": [
+    {
+      "name": "g2-microphone",
+      "desc": "Captures speech from G2 glasses mic for live pace coaching and word-rate feedback.",
+      "whitelist": []
+    }
+  ],
+  "supported_languages": ["en"]
+}
